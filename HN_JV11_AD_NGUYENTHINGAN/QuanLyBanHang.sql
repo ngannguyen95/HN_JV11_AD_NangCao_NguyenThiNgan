@@ -1,4 +1,5 @@
 create database qlbh;
+-- drop database qlbh;
 use qlbh;
 create table customer(
 cId int auto_increment primary key,
@@ -86,15 +87,13 @@ end //
 -- Tạo một stored procedure tên là delProduct nhận vào 1 tham số là tên của một sản phẩm, strored procedure này sẽ 
 -- xóa sản phẩm có tên được truyên vào thông qua tham số, và các thông tin liên quan đến sản phẩm đó ở trong bảng OrderDetail
 delimiter // 
-create procedure delProduct(proName varchar (25))
+create procedure delProduct(in proName varchar (25))
 begin
-delete from product where pName like proName
-update oderdetail 
-set product.pId = oderdetail.pId
-where product.pName;
+delete from OrderDetail where pId like (select pId from product where pName like proName ); 
+delete from product where pName like proName;
 end //
 delimiter ;
-call delProduct('Quat');
+call delProduct('May Giat');
 
 
 
